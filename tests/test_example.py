@@ -1,10 +1,16 @@
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import Page, expect
 
-def test_google():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, slow_mo=300)
-        page = browser.new_page()
-        page.goto("https://www.google.com")
-        assert "Google" in page.title()
-        page.wait_for_timeout(2000)
-        browser.close()
+from pages.google_search_page import GoogleSearchPage
+
+
+def test_google_search_shows_results(page: Page) -> None:
+    google_search_page = GoogleSearchPage(page)
+
+    google_search_page.goto()
+    google_search_page.assert_home_loaded()
+
+    query = "Playwright Python pytest"
+    google_search_page.search(query)
+    google_search_page.assert_search_outcome(query)
+    if page.locator("#search").is_visible():
+        expect(page.locator("#search")).to_contain_text("Playwright")

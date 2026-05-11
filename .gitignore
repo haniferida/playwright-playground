@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Playwright MCP artifacts
+.playwright-mcp/
+
+# Cursor local config (machine-specific)
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
